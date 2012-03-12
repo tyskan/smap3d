@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+	<title>WebGL</title>
+	<meta charset="latin1" />
+	<style type="text/css">
+		html, body {
+			height: 100%;
+			margin: 20px;
+		}
+		#renderer {
+		    border: 1px solid gray;
+		    box-shadow: 0 0 5px gray;
+		    border-radius: 3px;
+		}
+		button {
+		    padding:10px;
+		    background:#ddd;
+		    border:1px solid gray;
+		    border-radius:2px;
+		    box-shadow: 0 0 3px gray;
+		    min-width:50px;
+		}
+		button:hover {
+		    border:1px solid #666;
+		}		
+	</style>
+	
+	<script id="shader-fs" type="x-shader/x-fragment">
+		precision mediump float;
+
+		varying vec2 vTextureCoord;
+
+		uniform sampler2D uSampler;
+
+		void main(void) {
+			gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+		}
+	</script>
+
+	<script id="shader-vs" type="x-shader/x-vertex">
+		attribute vec3 aVertexPosition;
+		attribute vec2 aTextureCoord;
+
+		uniform mat4 uMVMatrix;
+		uniform mat4 uPMatrix;
+		varying vec2 vTextureCoord;
+
+		void main(void) {
+			gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+			vTextureCoord = aTextureCoord;
+		}
+	</script>
+	
+	<!-- External libraries -->
+	<script type="text/javascript" src="lib/jQuery/jQuery-1.7.1.js"></script>
+    <script type="text/javascript" src="lib/jQuery/jQuery.MouseHold.js"></script>
+    <script type="text/javascript" src="lib/glMatrix/glMatrix-0.9.5.min.js"></script>
+</head>
+<body>
+
+	<canvas id="renderer" width="500" height="500"></canvas>
+    <p id="toolbar">
+        <button id="left">Rotate left</button>
+        <button id="right">Rotate right</button><br/>
+    
+        <input type="radio" name="axis" value="x" id="x" checked = checked/><label for="x">X</label>
+        <input type="radio" name="axis" value="y" id="y"/><label for="x">Y</label>
+        <input type="radio" name="axis" value="z" id="z"/><label for="z">Z</label><br/>
+
+        <button id="in">In</button>
+        <button id="out">Out</button><br/>
+    
+        <button id="panXp">X+</button>
+        <button id="panXm">X-</button>
+        <button id="panYp">Y+</button>
+        <button id="panYm">Y-</button>
+        <button id="panZp">Z+</button>
+        <button id="panZm">Z-</button>
+        
+        <br />
+        <span>Zoom level: </span><span id="zoom"></span>
+    </p>
+
+	<!-- Smap3D libraries -->
+    <script type="text/javascript" src="lib/Smap3D.js"></script>
+	<script type="text/javascript" src="lib/Smap3D.Renderer.js"></script>
+	<script type="text/javascript" src="lib/Program.js"></script>
+
+</body>
+</html>	
